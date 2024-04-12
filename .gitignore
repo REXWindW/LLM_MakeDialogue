@@ -4,5 +4,4 @@
 # 忽略.DS_Store文件
 .DS_Store
 
-# 忽略pycache
-**/__pycache__
+.utils/__pycache__/
