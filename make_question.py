@@ -9,6 +9,7 @@ now_role = '''你是一个专业的农业助手'''
 prompt_list = '''以上是一段农业相关的文本资料，请你根据上述资料的内容，提出两个相关的问题，和两个与文本无关的假问题，用换行隔开。 '''
 
 WINDOW_SIZE = 10 # 设置滑动窗口的大小
+STRIDE = 3
 
 def split_response(original):
     questions = original.split('\n')
@@ -46,7 +47,7 @@ def process(context,prompt): # 处理单条对话
     dct['query'] = ''.join(context) # 这里叫query，实际上是context，我也不知道为什么bge微调格式里面context要放在dict的query里
     dct['pos'] = [tmp[0],tmp[1]]
     dct['neg'] = [tmp[1],tmp[2]]
-    with open('data.jsonl', 'a', encoding="utf-8") as f: # 用w会覆盖，a就不会
+    with open('agritext.jsonl', 'a', encoding="utf-8") as f: # 用w会覆盖，a就不会
         f.write(json.dumps(dct,ensure_ascii=False) + '\n') # 如果不加ensure_ascii=false的话，会输出的是编码不是中文
 
 def work():
@@ -58,7 +59,7 @@ def work():
 
     # 这里开始询问了
     dl_num = len(txt) # 段落数量
-    for i in range(dl_num - WINDOW_SIZE + 1): # 这里开始用大小为WINDOW_SIZE的窗口开始滑动
+    for i in range(0, dl_num - WINDOW_SIZE + 1, STRIDE): # 这里开始用大小为WINDOW_SIZE的窗口开始滑动
         print(f"[开始处理第{i}段]")
         prompt = ''.join(txt[i:i + WINDOW_SIZE])
         process(txt[i:i + WINDOW_SIZE],prompt)

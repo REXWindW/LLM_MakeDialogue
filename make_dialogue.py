@@ -9,6 +9,7 @@ now_role = '''你是一个专业的医疗助手'''
 prompt_list = '''以上是一段医学相关的文本资料，请你根据上述资料的内容，给出针对文本中知识的三对问答，提问和回答请用换行分开，不要有多余输出'''
 
 WINDOW_SIZE = 3 # 设置滑动窗口的大小
+STRIDE = 1 # 步长
 
 def split_response(original):
     questions = original.split('\n')
@@ -50,7 +51,7 @@ def work():
 
     # 这里开始询问了
     dl_num = len(txt) # 段落数量
-    for i in range(dl_num - WINDOW_SIZE + 1): # 这里开始用大小为WINDOW_SIZE的窗口开始滑动
+    for i in range(0, dl_num - WINDOW_SIZE + 1,STRIDE): # 这里开始用大小为WINDOW_SIZE的窗口开始滑动
         print(f"[开始处理第{i}段]")
         prompt = ''.join(txt[i:i + WINDOW_SIZE])
         process(qa_list,prompt)

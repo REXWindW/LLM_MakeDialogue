@@ -1,5 +1,4 @@
-API_KEYS = """
-"""
+API_KEYS = """"""
 
 def call_gpt(role_tmp, prompt, api_key):
     from openai import OpenAI
